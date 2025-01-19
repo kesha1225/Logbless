@@ -11,12 +11,12 @@
 <h1>{title}</h1>
 
 <div id="controls">
-    <input type="text" id="search" placeholder="Поиск...">
-    <input type="date" id="date-filter" placeholder="Фильтр по дате">
-    <button id="search-button">Найти</button>
-    <button id="refresh-button">Сбросить</button>
+    <input type="text" id="search" placeholder="Search...">
+    <input type="date" id="date-filter" placeholder="Date filter">
+    <button id="search-button">Search</button>
+    <button id="refresh-button">Reset</button>
     <select id="log-type-filter">
-        <option value="">Любой уровень</option>
+        <option value="">Any level</option>
         <option value="INFO">INFO</option>
         <option value="ERROR">ERROR</option>
         <option value="DEBUG">DEBUG</option>
@@ -24,7 +24,6 @@
     </select>
 </div>
 
-<!-- Контейнер логов -->
 <pre id="log-container">{log_data}</pre>
 </body>
 </html>
