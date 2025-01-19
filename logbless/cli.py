@@ -17,7 +17,8 @@ def cli():
 def init():
     if os.path.exists(CONFIG_FILENAME):
         print(
-            f"Already inited. Edit {CONFIG_FILENAME} and use logbless run for start application."
+            f"The application is already initialized. "
+            f"Edit the configuration file '{CONFIG_FILENAME}' and use 'logbless run' to start the application."
         )
         return
 
@@ -25,7 +26,8 @@ def init():
         yaml.dump(BASE_CONFIG, f, default_flow_style=False)
 
     print(
-        f"Success! Edit {CONFIG_FILENAME} and use logbless run for start application."
+        f"Initialization successful! "
+        f"Edit the configuration file '{CONFIG_FILENAME}' and use 'logbless run' to start the application."
     )
 
 
@@ -33,10 +35,11 @@ def init():
 def run():
     if not os.path.exists(CONFIG_FILENAME):
         print(
-            f"Logbless is not inited. Type logbless init."
+            f"The application is not initialized. "
+            f"Please run 'logbless init' first."
         )
         return
-    
+
     from logbless.app import app
     from logbless.config import HOST, PORT
     uvicorn.run(app, host=HOST, port=PORT)
