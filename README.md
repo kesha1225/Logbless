@@ -58,7 +58,7 @@ Example log entry:
    Before starting the application, create a configuration file by running:
 
    ```shell
-   logbless init
+   uv run logbless init
    ```
 
    After executing the command, a file named `logbless_conf.yaml` will be created. You need to edit this file before running the application.
@@ -83,7 +83,7 @@ Example log entry:
    After editing the configuration file, start the application by running:
 
    ```shell
-   logbless run
+   uv run logbless run
    ```
 
    The application will start and be available at `http://127.0.0.1:8070` (or another address if you modified the `host` and `port` settings).
