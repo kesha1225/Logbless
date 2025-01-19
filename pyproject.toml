@@ -3,11 +3,9 @@ name = "logbless"
 version = "0.1.0"
 description = "Simple logs for any app"
 authors = [
-    { name = "kesha1225"}
+    { name = "kesha1225" }
 ]
 keywords = ["logs", "logging", "log viewer", "real-time", "monitoring", "FastAPI", "lightweight"]
-homepage = "https://github.com/kesha1225/Logbless"
-repository = "https://github.com/kesha1225/Logbless"
 
 readme = "README.md"
 requires-python = ">=3.12"
@@ -34,7 +32,6 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 
-
 [tool.uv]
 package = true
 
@@ -43,6 +40,13 @@ dev = [
     "ruff>=0.9.2",
 ]
 
-
 [project.scripts]
 logbless = "logbless.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["logbless"]
+exclude = ["assets"]
+
+[project.urls]
+Homepage = "https://github.com/kesha1225/Logbless"
+Repository = "https://github.com/kesha1225/Logbless"
