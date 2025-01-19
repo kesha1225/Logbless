@@ -6,8 +6,20 @@
 
 ### Installation
 
+#### macos/linux
 ```shell
-pip install logbless
+wget -qO- https://astral.sh/uv/install.sh | sh
+uv venv --python 3.12
+source .venv/bin/activate
+uv pip install logbless
+```
+
+#### windows
+```shell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+uv venv --python 3.12
+.venv\Scripts\activate
+uv pip install logbless
 ```
 
 ---

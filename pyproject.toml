@@ -1,6 +1,6 @@
 [project]
 name = "logbless"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simple logs for any app"
 authors = [
     { name = "kesha1225" }
@@ -44,7 +44,7 @@ dev = [
 logbless = "logbless.cli:cli"
 
 [tool.setuptools.packages.find]
-where = ["logbless"]
+where = ["."]
 exclude = ["assets"]
 
 [project.urls]
