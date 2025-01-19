@@ -77,4 +77,5 @@ Example log entry:
    The application will start and be available at `http://127.0.0.1:8070` (or another address if you modified the `host` and `port` settings).
 
 
+---
 ![img.png](assets/img.png)
