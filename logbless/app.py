@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from starlette import status
@@ -7,7 +9,9 @@ from starlette.staticfiles import StaticFiles
 from logbless.config import PATH, LOG_FILENAME, LOGIN, PASSWORD, TITLE
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
-app.mount("/static", StaticFiles(directory="logbless/static"), name="static")
+
+static_path = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/static", StaticFiles(directory=static_path), name="static")
 security = HTTPBasic()
 
 
