@@ -78,4 +78,4 @@ Example log entry:
 
 
 ---
-![view.png](assets/view.png)
+![view.png](assets/view_eng.png)
