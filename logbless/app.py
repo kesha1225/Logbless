@@ -45,5 +45,5 @@ async def logs_page(authenticated: bool = Depends(authenticate)):
 
     log_data = get_logs()
 
-    with open(f"logbless/static/log_viewer.html") as f:
+    with open(f"{static_path}/log_viewer.html") as f:
         return f.read().format(log_data=log_data, title=TITLE)
