@@ -1,0 +1,67 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#controls {
+    margin-bottom: 10px;
+}
+
+#controls input, #controls button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+#controls label {
+    font-size: 14px;
+}
+
+.log-line {
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+    padding: 2px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.log-line:hover {
+    background-color: #f9f9f9;
+}
+
+.log-date {
+    color: #ffa500;
+    font-weight: bold;
+}
+
+.log-level.INFO {
+    color: #007bff;
+}
+
+.log-level.ERROR {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.log-level.DEBUG {
+    color: #28a745;
+}
+
+.log-level.WARN {
+    color: #ffc107;
+}
+
+.log-path {
+    color: #6c757d;
+    font-style: italic;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+    overflow-x: hidden;
+    max-height: 80vh;
+    overflow-y: scroll;
+}

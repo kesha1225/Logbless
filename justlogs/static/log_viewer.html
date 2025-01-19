@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/log_viewer.css">
+    <script src="/static/log_viewer.js"></script>
+    <title>{title}</title>
+</head>
+<body>
+<h1>{title}</h1>
+
+<div id="controls">
+    <input type="text" id="search" placeholder="Поиск...">
+    <input type="date" id="date-filter" placeholder="Фильтр по дате">
+    <button id="search-button">Найти</button>
+    <button id="refresh-button">Сбросить</button>
+    <select id="log-type-filter">
+        <option value="">Любой уровень</option>
+        <option value="INFO">INFO</option>
+        <option value="ERROR">ERROR</option>
+        <option value="DEBUG">DEBUG</option>
+        <option value="WARN">WARN</option>
+    </select>
+</div>
+
+<!-- Контейнер логов -->
+<pre id="log-container">{log_data}</pre>
+</body>
+</html>
