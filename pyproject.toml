@@ -1,5 +1,5 @@
 [project]
-name = "justlogs"
+name = "logbless"
 version = "0.1.0"
 description = "Simple logs for any app"
 readme = "README.md"
@@ -21,4 +21,4 @@ dev = [
 
 
 [project.scripts]
-justlogs = "justlogs.cli:cli"
+logbless = "logbless.cli:cli"

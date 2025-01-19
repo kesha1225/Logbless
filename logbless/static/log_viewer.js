@@ -89,9 +89,6 @@ window.onload = function () {
                     logContainer.scrollTop = Math.max(0, targetElement.offsetTop - 140);
                 }
                 targetElement.classList.add('highlight');
-                setTimeout(() => {
-                    targetElement.classList.remove('highlight');
-                }, 1000);
             }
         }
     };
@@ -161,6 +158,11 @@ window.onload = function () {
 
         if (!searchTerm && !selectedDate && !selectedLogType) {
             refreshLogs(scrollBottom);
+            return;
+        }
+
+        if (selectedDate && !searchTerm && !selectedLogType) {
+            filterByDate(scrollBottom)
             return;
         }
 

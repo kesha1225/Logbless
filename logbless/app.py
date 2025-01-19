@@ -4,10 +4,10 @@ from starlette import status
 from starlette.responses import HTMLResponse
 from starlette.staticfiles import StaticFiles
 
-from justlogs.config import PATH, LOG_FILENAME, LOGIN, PASSWORD, TITLE
+from logbless.config import PATH, LOG_FILENAME, LOGIN, PASSWORD, TITLE
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
-app.mount("/static", StaticFiles(directory="justlogs/static"), name="static")
+app.mount("/static", StaticFiles(directory="logbless/static"), name="static")
 security = HTTPBasic()
 
 
@@ -41,5 +41,5 @@ async def logs_page(authenticated: bool = Depends(authenticate)):
 
     log_data = get_logs()
 
-    with open(f"justlogs/static/log_viewer.html") as f:
+    with open(f"logbless/static/log_viewer.html") as f:
         return f.read().format(log_data=log_data, title=TITLE)

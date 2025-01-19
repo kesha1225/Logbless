@@ -1,6 +1,6 @@
 import yaml
 
-from justlogs.constants import CONFIG_FILENAME
+from logbless.constants import CONFIG_FILENAME
 
 with open(CONFIG_FILENAME, "r") as file:
     config = yaml.safe_load(file)

@@ -31,7 +31,7 @@ body {
 }
 
 .log-date {
-    color: #ffa500;
+    color: #2a666c;
     font-weight: bold;
 }
 
@@ -64,4 +64,10 @@ pre {
     overflow-x: hidden;
     max-height: 80vh;
     overflow-y: scroll;
+}
+
+
+.highlight {
+    background-color: #6caca2;
+    transition: background-color 1s ease-out;
 }

@@ -1,4 +1,4 @@
-CONFIG_FILENAME = "JL_conf.yaml"
+CONFIG_FILENAME = "logbless_conf.yaml"
 
 
 BASE_CONFIG = {
@@ -6,6 +6,6 @@ BASE_CONFIG = {
     "port": 8070,
     "path": "/logs",
     "log_filename": "logs.log",
-    "title": "JustLogs Log viewer",
+    "title": "Logbless Log viewer",
     "authentication": {"login": "admin", "password": "admin"},
 }
