@@ -2,12 +2,36 @@
 name = "logbless"
 version = "0.1.0"
 description = "Simple logs for any app"
+authors = [
+    { name = "kesha1225"}
+]
+keywords = ["logs", "logging", "log viewer", "real-time", "monitoring", "FastAPI", "lightweight"]
+homepage = "https://github.com/kesha1225/Logbless"
+repository = "https://github.com/kesha1225/Logbless"
+
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115.6",
     "pyyaml>=6.0.2",
     "uvicorn>=0.34.0",
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Utilities",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Monitoring",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Framework :: FastAPI",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent"
 ]
 
 
