@@ -13,8 +13,6 @@
 <div id="controls">
     <input type="text" id="search" placeholder="Search...">
     <input type="date" id="date-filter" placeholder="Date filter">
-    <button id="search-button">Search</button>
-    <button id="refresh-button">Reset</button>
     <select id="log-type-filter">
         <option value="">Any level</option>
         <option value="INFO">INFO</option>
@@ -22,8 +20,12 @@
         <option value="DEBUG">DEBUG</option>
         <option value="WARN">WARN</option>
     </select>
+    <button id="search-button">Search</button>
+    <button id="top-button">To start</button>
+    <button id="bottom-button">To end</button>
+    <button id="refresh-button">Reset</button>
 </div>
 
-<pre id="log-container">{log_data}</pre>
+<pre id="log-container"></pre>
 </body>
 </html>

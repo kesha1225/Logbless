@@ -43,7 +43,5 @@ async def logs_page(authenticated: bool = Depends(authenticate)):
     if not authenticated:
         return {}
 
-    log_data = get_logs()
-
     with open(f"{static_path}/log_viewer.html") as f:
-        return f.read().format(log_data=log_data, title=TITLE)
+        return f.read().format(title=TITLE)

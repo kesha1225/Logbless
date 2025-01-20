@@ -71,3 +71,59 @@ pre {
     background-color: #6caca2;
     transition: background-color 1s ease-out;
 }
+
+#log-type-filter {
+    margin-right: 10px;
+}
+
+
+#controls input {
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#controls button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#search-button {
+    background-color: #007bff;
+}
+
+#search-button:hover {
+    background-color: #0069d9;
+}
+
+#top-button {
+    background-color: #f0ad4e;
+}
+
+#top-button:hover {
+    background-color: #ec971f;
+}
+
+#bottom-button {
+    background-color: #f0ad4e;
+}
+
+#bottom-button:hover {
+    background-color: #ec971f;
+}
+
+#refresh-button {
+    background-color: #dc3545;
+}
+
+#refresh-button:hover {
+    background-color: #c82333;
+}
