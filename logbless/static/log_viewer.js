@@ -9,6 +9,7 @@ window.onload = async function () {
 
     let isSearchMode = false;
     let isDateJumpMode = false;
+    let updateNeed = true
 
     let filteredIndexes = [];
 
@@ -129,11 +130,13 @@ window.onload = async function () {
 
     function initAllLogs(scrollToBottom = true) {
         if (groupedLogs.length === 0) {
+            updateNeed = false
             logContainer.innerHTML = '(Ничего не найдено)';
             visibleStartAll = 0;
             visibleEndAll = -1;
             return;
         }
+
         if (scrollToBottom) {
             goToBottomAll();
             return;
@@ -144,25 +147,48 @@ window.onload = async function () {
         }
     }
 
+    function onScrollSearchMode() {
+        if (filteredIndexes.length === 0) return;
+
+        const scrollTop = logContainer.scrollTop;
+        const scrollHeight = logContainer.scrollHeight;
+        const clientHeight = logContainer.clientHeight;
+
+        let buffer = 300
+
+        if (scrollTop < buffer && visibleStartSearch > 0) {
+
+            visibleStartSearch = Math.max(0, visibleStartSearch - CHUNK_SIZE);
+            renderSearchWindow('prepend');
+        }
+
+        if (scrollTop + clientHeight > scrollHeight - buffer && visibleEndSearch < filteredIndexes.length - 1) {
+
+            visibleEndSearch = Math.min(filteredIndexes.length - 1, visibleEndSearch + CHUNK_SIZE);
+            renderSearchWindow('append');
+        }
+    }
+
     function onScrollAllLogs() {
         if (groupedLogs.length === 0) return;
         const scrollTop = logContainer.scrollTop;
         const scrollHeight = logContainer.scrollHeight;
         const clientHeight = logContainer.clientHeight;
 
-        if (scrollTop < 200 && visibleStartAll > 0) {
-            const chunkSize = CHUNK_SIZE;
+        let buffer = 300
+
+        if (scrollTop < buffer && visibleStartAll > 0) {
+
             const newEnd = visibleStartAll - 1;
-            const newStart = Math.max(0, visibleStartAll - chunkSize);
+            const newStart = Math.max(0, visibleStartAll - CHUNK_SIZE);
 
             renderWindow(newStart, newEnd, 'prepend', groupedLogs);
             visibleStartAll = newStart;
         }
 
-        if (scrollTop + clientHeight > scrollHeight - 200 && visibleEndAll < groupedLogs.length - 1) {
-            const chunkSize = CHUNK_SIZE;
+        if (scrollTop + clientHeight > scrollHeight - buffer && visibleEndAll < groupedLogs.length - 1) {
             const newStart = visibleEndAll + 1;
-            const newEnd = Math.min(groupedLogs.length - 1, visibleEndAll + chunkSize);
+            const newEnd = Math.min(groupedLogs.length - 1, visibleEndAll + CHUNK_SIZE);
 
             renderWindow(newStart, newEnd, 'append', groupedLogs);
             visibleEndAll = newEnd;
@@ -200,12 +226,24 @@ window.onload = async function () {
         let idx;
         let bestDate;
 
+        let currentLogs = groupedLogs
+
+        if (filteredIndexes.length > 0) {
+            currentLogs = []
+            for (let i = 0; i < groupedLogs.length; i++) {
+                if (filteredIndexes && !filteredIndexes.includes(i)) continue;
+
+                currentLogs.push(groupedLogs[i])
+            }
+        }
+
         idx = groupedLogs.findIndex(log => log.includes(dateString));
         if (idx === -1) {
             isSearchMode = true;
             logContainer.innerHTML = `Дата "${dateString}" не найдена`;
             visibleStartAll = 0;
             visibleEndAll = -1;
+            updateNeed = false
             return;
         }
 
@@ -217,8 +255,8 @@ window.onload = async function () {
 
             let bestDiff = Number.MAX_SAFE_INTEGER;
 
-            for (let i = 0; i < groupedLogs.length; i++) {
-                const log = groupedLogs[i];
+            for (let i = 0; i < currentLogs.length; i++) {
+                const log = currentLogs[i];
                 const match = log.match(DATE_REGEX);
                 if (!match) continue;
 
@@ -256,19 +294,19 @@ window.onload = async function () {
 
         const halfWindow = 200;
         let start = Math.max(0, idx - halfWindow);
-        let end = Math.min(groupedLogs.length - 1, start + CHUNK_SIZE - 1);
+        let end = Math.min(currentLogs.length - 1, start + CHUNK_SIZE - 1);
 
         if (idx > end) {
             end = idx + 1;
         }
-        if (end > groupedLogs.length - 1) {
-            end = groupedLogs.length - 1;
+        if (end > currentLogs.length - 1) {
+            end = currentLogs.length - 1;
         }
 
         visibleStartAll = start;
         visibleEndAll = end;
 
-        renderWindow(start, end, 'replace', groupedLogs);
+        renderWindow(start, end, 'replace', currentLogs);
 
         const lines = logContainer.querySelectorAll('.log-line');
         let found = null;
@@ -308,6 +346,10 @@ window.onload = async function () {
     }
 
     function renderSearchWindow(mode) {
+        if (!updateNeed) {
+            return
+        }
+
         if (visibleStartSearch > visibleEndSearch) return;
 
         let html = '';
@@ -326,27 +368,9 @@ window.onload = async function () {
             logContainer.innerHTML = html + logContainer.innerHTML;
 
             const newScrollHeight = logContainer.scrollHeight;
-            logContainer.scrollTop = newScrollHeight - oldScrollHeight + oldScrollTop;
+            logContainer.scrollTop = (newScrollHeight - oldScrollHeight + oldScrollTop) / 3;
         } else if (mode === 'append') {
             logContainer.innerHTML += html;
-        }
-    }
-
-    function onScrollSearchMode() {
-        if (filteredIndexes.length === 0) return;
-
-        const scrollTop = logContainer.scrollTop;
-        const scrollHeight = logContainer.scrollHeight;
-        const clientHeight = logContainer.clientHeight;
-
-        if (scrollTop < 200 && visibleStartSearch > 0) {
-            visibleStartSearch = Math.max(0, visibleStartSearch - CHUNK_SIZE);
-            renderSearchWindow('prepend');
-        }
-
-        if (scrollTop + clientHeight > scrollHeight - 200 && visibleEndSearch < filteredIndexes.length - 1) {
-            visibleEndSearch = Math.min(filteredIndexes.length - 1, visibleEndSearch + CHUNK_SIZE);
-            renderSearchWindow('append');
         }
     }
 
@@ -372,52 +396,59 @@ window.onload = async function () {
             endDateD = new Date(endDateValue);
         }
 
+
+        if (startDateD) {
+            if (startTimeValue) {
+                let [hours, minutes] = parseTime(startTimeValue || '');
+                startDateD.setHours(hours, minutes, 0, 0);
+            } else {
+                startDateD.setHours(0, 0, 0, 0);
+            }
+        }
+
+        if (endDateD) {
+            if (endTimeValue) {
+                let [hours, minutes] = parseTime(endTimeValue || '');
+                endDateD.setHours(hours, minutes, 0, 0);
+            } else {
+                endDateD.setHours(23, 59, 0, 0);
+            }
+        }
+
+
         for (let i = 0; i < groupedLogs.length; i++) {
             const log = groupedLogs[i];
             if (text && !log.toLowerCase().includes(lowText)) continue;
             if (level && !log.includes(level)) continue;
 
-            if (startDateD && endDateD) {
-                if (startTimeValue) {
-                    let [hours, minutes] = parseTime(startTimeValue || '');
-                    startDateD.setHours(hours, minutes, 0, 0);
-                } else {
-                    startDateD.setHours(0, 0, 0, 0);
-                }
-                if (endTimeValue) {
-                    let [hours, minutes] = parseTime(endTimeValue || '');
-                    endDateD.setHours(hours, minutes, 0, 0);
-                } else {
-                    endDateD.setHours(23, 59, 0, 0);
-                }
+            const match = log.match(DATE_REGEX);
+            if (!match) continue;
 
-                const match = log.match(DATE_REGEX);
-                if (!match) continue;
-                const dtStr = match[0].trim();
-                let dtParsed = null;
-                if (dtStr) {
-                    const parts = dtStr.split(/[\s:\-,]+/);
-                    if (parts.length >= 3) {
-                        const [yyyy, mm, dd, HH, MM, SS, MMM] = parts;
-                        dtParsed = new Date(
-                            parseInt(yyyy, 10),
-                            parseInt(mm, 10) - 1,
-                            parseInt(dd, 10),
-                            parseInt(HH, 10),
-                            parseInt(MM, 10),
-                        );
-                    }
+            const dtStr = match[0].trim();
+            let dtParsed = null;
+            if (dtStr) {
+                const parts = dtStr.split(/[\s:\-,]+/);
+                if (parts.length >= 3) {
+                    const [yyyy, mm, dd, HH, MM, SS, MMM] = parts;
+                    dtParsed = new Date(
+                        parseInt(yyyy, 10),
+                        parseInt(mm, 10) - 1,
+                        parseInt(dd, 10),
+                        parseInt(HH, 10),
+                        parseInt(MM, 10),
+                    );
                 }
-                if (!dtParsed) {
-                    continue;
-                }
+            }
+            if (!dtParsed) {
+                continue;
+            }
 
-                if (startDateD && (dtParsed < startDateD)) {
-                    continue;
-                }
-                if (endDateD && (dtParsed > endDateD)) {
-                    continue;
-                }
+            if (startDateD && (dtParsed < startDateD)) {
+                continue;
+            }
+
+            if (endDateD && (dtParsed > endDateD)) {
+                continue
             }
 
             results.push(i);
@@ -427,6 +458,8 @@ window.onload = async function () {
 
 
     function performSearch() {
+        updateNeed = true
+        filteredIndexes = []
         const text = searchInput.value.trim();
         const level = levelFilter.value.trim();
         const hasDateRange = startDate.value || endDate.value;
@@ -445,11 +478,23 @@ window.onload = async function () {
 
         isSearchMode = true;
         isDateJumpMode = false
+
         filteredIndexes = doFilter(text, level);
+
+        if (startDate.value && !endDate.value) {
+            isDateJumpMode = true
+            jumpToDate(startDate.value, startTime.value);
+            return;
+        }
+
         initSearchMode();
     }
 
     async function refreshAllLogs(scrollToBottom = false) {
+        if (!updateNeed) {
+            return
+        }
+
         try {
             const response = await fetch('/update', {
                 method: 'GET',
@@ -483,7 +528,6 @@ window.onload = async function () {
     await refreshAllLogs(true);
 
     logContainer.addEventListener('scroll', () => {
-        console.log(isSearchMode)
         if (isSearchMode) {
             onScrollSearchMode();
         } else {
@@ -503,8 +547,14 @@ window.onload = async function () {
     });
     levelFilter.addEventListener('change', performSearch);
 
-    startDate.addEventListener('change', updateTimeFields);
-    endDate.addEventListener('change', updateTimeFields);
+    startDate.addEventListener('change', () => {
+        updateTimeFields()
+        clearStartDate()
+    });
+    endDate.addEventListener('change', () => {
+        updateTimeFields()
+        clearEndDate()
+    });
     startDate.addEventListener('change', performSearch);
     endDate.addEventListener('change', performSearch);
     endTime.addEventListener('change', performSearch);
@@ -519,8 +569,12 @@ window.onload = async function () {
         endTime.value = '';
         levelFilter.value = '';
         isSearchMode = false;
+        updateNeed = true
+        filteredIndexes = []
         initAllLogs(true);
         updateTimeFields()
+        clearStartDate()
+        clearEndDate()
     });
 
     topButton.addEventListener('click', () => {
@@ -544,11 +598,16 @@ window.onload = async function () {
         }
     });
 
+    function clearStartDate() {
+        startTime.value = '';
+
+    }
+
+    function clearEndDate() {
+        endTime.value = '';
+    }
 
     function updateTimeFields() {
-        startTime.value = '';
-        endTime.value = '';
-
         startTime.disabled = !startDate.value;
         endTime.disabled = !endDate.value;
     }
